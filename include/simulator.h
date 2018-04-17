@@ -1,7 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "memory.h"
+
+#define MEM_SIZE 4096   // Simulated memory's size
+
+// Memory
+int32_t mem[MEM_SIZE];  // Memory array
 
 class MIPS
 {
@@ -15,11 +19,11 @@ public:
     
 private:
     bool finish_sim_;
-    uint32_t *pc;
+    uint32_t pc;
     uint32_t ri, hi, lo;
     // 
-    int32_t opcode, rs, rt, rd, shamt, funct, k16;
-    uint32_t k26;
+    int32_t opcode, rs, rt, rd, shamt, funct, kte16;
+    uint32_t kte26;
 
     void openFile(std::string);
 
@@ -27,6 +31,9 @@ private:
     void fetch();
     void decode();
     void execute();
+
+    // Registers
+    int32_t R[32];  // Memory array
 
     enum OPCODES
     {
