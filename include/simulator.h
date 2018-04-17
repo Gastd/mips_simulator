@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "memory.h"
 
 class MIPS
 {
@@ -14,10 +15,13 @@ public:
     
 private:
     bool finish_sim_;
-    uint32_t pc, ri;
-    int32_t opcode, rs rt, sd, shamt, funct;
+    uint32_t *pc;
+    uint32_t ri, hi, lo;
+    // 
+    int32_t opcode, rs, rt, rd, shamt, funct, k16;
+    uint32_t k26;
 
-    void open_file(std::string);
+    void openFile(std::string);
 
     // simulating mips
     void fetch();
@@ -36,9 +40,9 @@ private:
 
     enum FUNCT
     {
-    ADD=0x20,   SUB=0x22,   MULT=0x18,  DIV=0x1A,   AND=0x24,
-    OR=0x25,    XOR=0x26,   NOR=0x27,   SLT=0x2A,   JR=0x08,
-    SLL=0x00,   SRL=0x02,   SRA=0x03,   SYSCALL=0x0C,
-    MFHI=0x10,  MFLO=0x12
+        ADD=0x20,   SUB=0x22,   MULT=0x18,  DIV=0x1A,   AND=0x24,
+        OR=0x25,    XOR=0x26,   NOR=0x27,   SLT=0x2A,   JR=0x08,
+        SLL=0x00,   SRL=0x02,   SRA=0x03,   SYSCALL=0x0C,
+        MFHI=0x10,  MFLO=0x12
     };
 };
