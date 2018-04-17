@@ -48,12 +48,14 @@ void MIPS::fetch()
 
 void MIPS::decode()
 {
-    opcode = (ri & 0xFC00000)>>26;
-    rs = (ri & 0x1F00000)>>20;
-    rt = (ri & 0x1F0000)>>16;
+    opcode = (ri & 0xFC000000)>>26;
+    rs = (ri & 0x3E00000)>>21;
+    rt = (ri & 0x1F0000)>>15;
     rd = (ri & 0xF800)>>11;
     shamt = (ri & 0x7C0)>>6;
     funct = (ri & 0x3F);
+    k16 = (ri & 0xFFFF);
+    k26 = (ri & 0x3FFFFFF);
 }
 
 void MIPS::execute()
