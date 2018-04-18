@@ -12,7 +12,7 @@
 
 # Compiler & flags
 CC       = g++
-CXXFLAGS = -Wall -std=c++11
+CXXFLAGS = -Wall -std=c++11 -g
 
 # Target [folder(s)]
 BIN_DIR = bin
