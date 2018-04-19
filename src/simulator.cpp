@@ -31,7 +31,7 @@ kte16(0x0), kte26(0x0)
 
     // Init $sp and $gp
     R[28] = GLOBAL_START; // $gp
-    R[29] = STACK_START; // $sp
+    R[29] = STACK_START;  // $sp
 }
 
 MIPS::~MIPS()
@@ -43,13 +43,14 @@ void MIPS::loadMemory(std::string text_path, std::string data_path, bool print_i
     print_instructions_ = print_instructions;
 
     std::ifstream infile;
+    int8_t *memory_pointer;
     char buffer[4];
 
     // loading .text
     infile.open(text_path, std::ios::binary|std::ios::in);
     if(infile.is_open())
     {
-        int8_t *memory_pointer = (int8_t *) &mem[TEXT_START >> 2];
+        memory_pointer = (int8_t *) &mem[TEXT_START >> 2];
         // printf("memory_pointer = %p\n", memory_pointer);
         while (infile.read(buffer, 4))
         {
@@ -74,7 +75,7 @@ void MIPS::loadMemory(std::string text_path, std::string data_path, bool print_i
     infile.open(data_path, std::ios::binary|std::ios::in);
     if(infile.is_open())
     {
-        int8_t *memory_pointer = (int8_t *) &mem[DATA_START >> 2];
+        memory_pointer = (int8_t *) &mem[DATA_START >> 2];
         // printf("memory_pointer = %p\n", memory_pointer);
         while(infile.read(buffer, 4))
         {
