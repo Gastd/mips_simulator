@@ -30,23 +30,7 @@ int main(int argc, char *argv[])
 
     mips.fillMemory(text_path, data_path, false);
 
-    // mips.step();
-    // mips.step();
-    // mips.step();
-    // mips.step();
-    // mips.step();
-    // mips.step();
-    // mips.step();
-    // mips.step();
-    // mips.step();
-    // mips.step();
-    // mips.step();
-    // mips.step();
-    // mips.step();
-    // mips.step();
-
     mips.run();
-    // mips.dump_reg('h');
 
     return 0;
 }

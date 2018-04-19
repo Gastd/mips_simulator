@@ -75,7 +75,7 @@ private:
     };
 
 
-    // simulated mips instructions
+    // simulated memory access instructions
     int32_t lw(uint32_t address, int16_t kte);              // Simulated instruction lw, load word
     int32_t lh(uint32_t address, int16_t kte);              // Simulated instruction lh, load halfword
     uint32_t lhu(uint32_t address, int16_t kte);            // Simulated instruction lhu, load unsigned halfword

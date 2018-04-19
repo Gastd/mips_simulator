@@ -49,7 +49,7 @@ void MIPS::fillMemory(std::string text_path, std::string data_path, bool print_i
     {
         char *buffer = new char[4];
         int8_t *memory_pointer = (int8_t *) &mem[0];
-        printf("memory_pointer = %p\n", memory_pointer);
+        // printf("memory_pointer = %p\n", memory_pointer);
         while (infile.read(buffer, 4))
         {
             memory_pointer[0] = buffer[0];
@@ -61,7 +61,7 @@ void MIPS::fillMemory(std::string text_path, std::string data_path, bool print_i
             memory_pointer+=4;
         }
         memory_filled_ = true;
-        printf("mem[0] = %0x\n", mem[0]);
+        // printf("mem[0] = %0x\n", mem[0]);
         infile.close();
     }
     else
@@ -75,7 +75,7 @@ void MIPS::fillMemory(std::string text_path, std::string data_path, bool print_i
     {
         char *buffer = new char[4];
         int8_t *memory_pointer = (int8_t *) &mem[2048];
-        printf("memory_pointer = %p\n", memory_pointer);
+        // printf("memory_pointer = %p\n", memory_pointer);
         while(infile.read(buffer, 4))
         {
             memory_pointer[0] = buffer[0];
@@ -84,7 +84,7 @@ void MIPS::fillMemory(std::string text_path, std::string data_path, bool print_i
             memory_pointer[3] = buffer[3];
             memory_pointer+=4;
         }
-        printf("mem[2048] = %0x\n", mem[2048]);
+        // printf("mem[2048] = %0x\n", mem[2048]);
         infile.close();
     }
     else
@@ -97,7 +97,7 @@ void MIPS::run()
 {
     if (!memory_filled_)
     {
-        std::cout << "Memory not loaded" << std::endl;
+        std::cout << "Memory not initialized" << std::endl;
         return;
     }
     while((pc <= 0x7D0) and (!finish_sim_))  /*pc <= 2k words*/
@@ -110,9 +110,14 @@ void MIPS::run()
 
 void MIPS::step()
 {
-    if (!memory_filled_ or pc > 0x7D0)
+    if (!memory_filled_)
     {
-        std::cout << "Memory not loaded" << std::endl;
+        std::cout << "Memory not initialized" << std::endl;
+        return;
+    }
+    if( pc > 0x7D0)
+    {
+        std::cout << "PC out of range" << std::endl;
         return;
     }
 
@@ -129,7 +134,7 @@ void MIPS::fetch()
 
 void MIPS::decode()
 {
-    int16_t aux;
+    int16_t aux; // Auxiliar variable used to extend the signal of kte16
     opcode = (ri & 0xFC000000)>>26;
     rs = (ri & 0x3E00000)>>21;
     rt = (ri & 0x1F0000)>>16;
