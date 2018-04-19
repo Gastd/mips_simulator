@@ -16,9 +16,12 @@
 #include <fstream>
 #include <string>
 
-#define MEM_SIZE 4096   // Simulated memory's size
-
-// Memory
+#define MEM_SIZE        4096   // Simulated memory's size
+#define TEXT_START      0x0000 // .text base address
+#define TEXT_LIMIT      0x07D0 // .text limit address
+#define DATA_START      0x2000 // .data base address
+#define GLOBAL_START    0x1800 // global pointer $gp
+#define STACK_START     0x3FFC // stack base address, stack pointer $sp
 
 class MIPS
 {

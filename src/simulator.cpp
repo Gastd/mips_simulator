@@ -30,8 +30,8 @@ kte16(0x0), kte26(0x0)
     }
 
     // Init $sp and $gp
-    R[28] = 0x1800; // $gp
-    R[29] = 0x3FFC; // $sp
+    R[28] = GLOBAL_START; // $gp
+    R[29] = STACK_START; // $sp
 }
 
 MIPS::~MIPS()
@@ -43,14 +43,13 @@ void MIPS::loadMemory(std::string text_path, std::string data_path, bool print_i
     print_instructions_ = print_instructions;
 
     std::ifstream infile;
-    // char *buffer = new char[4];
     char buffer[4];
 
     // loading .text
     infile.open(text_path, std::ios::binary|std::ios::in);
     if(infile.is_open())
     {
-        int8_t *memory_pointer = (int8_t *) &mem[0];
+        int8_t *memory_pointer = (int8_t *) &mem[TEXT_START >> 2];
         // printf("memory_pointer = %p\n", memory_pointer);
         while (infile.read(buffer, 4))
         {
@@ -75,7 +74,7 @@ void MIPS::loadMemory(std::string text_path, std::string data_path, bool print_i
     infile.open(data_path, std::ios::binary|std::ios::in);
     if(infile.is_open())
     {
-        int8_t *memory_pointer = (int8_t *) &mem[2048];
+        int8_t *memory_pointer = (int8_t *) &mem[DATA_START >> 2];
         // printf("memory_pointer = %p\n", memory_pointer);
         while(infile.read(buffer, 4))
         {
@@ -92,8 +91,6 @@ void MIPS::loadMemory(std::string text_path, std::string data_path, bool print_i
     {
         std::cout << "Error opening data file" << std::endl;
     }
-
-    // delete[] buffer;
 }
 
 void MIPS::run()
@@ -103,7 +100,7 @@ void MIPS::run()
         std::cout << "Memory not initialized" << std::endl;
         return;
     }
-    while((pc <= 0x7D0) and (!finish_sim_))  /*pc <= 2k words*/
+    while((pc <= TEXT_LIMIT) and (!finish_sim_))  /*pc <= 2k words*/
     {
         fetch();
         decode();
@@ -118,7 +115,7 @@ void MIPS::step()
         std::cout << "Memory not initialized" << std::endl;
         return;
     }
-    if( pc > 0x7D0)
+    if( pc > TEXT_LIMIT)
     {
         std::cout << "PC out of range" << std::endl;
         return;
@@ -131,18 +128,18 @@ void MIPS::step()
 
 void MIPS::fetch()
 {
-    ri = mem[pc>>2];
+    ri = mem[pc >> 2];
     pc += 4;
 }
 
 void MIPS::decode()
 {
     int16_t aux; // Auxiliar variable used to extend the signal of kte16
-    opcode = (ri & 0xFC000000)>>26;
-    rs = (ri & 0x3E00000)>>21;
-    rt = (ri & 0x1F0000)>>16;
-    rd = (ri & 0xF800)>>11;
-    shamt = (ri & 0x7C0)>>6;
+    opcode = (ri & 0xFC000000) >> 26;
+    rs = (ri & 0x3E00000) >> 21;
+    rt = (ri & 0x1F0000) >> 16;
+    rd = (ri & 0xF800) >> 11;
+    shamt = (ri & 0x7C0) >> 6;
     funct = (ri & 0x3F);
     
     aux = (ri & 0xFFFF);
@@ -270,8 +267,8 @@ void MIPS::execute()
                         // printf("SYSCALL PRINT STRING\n");
                         // byte address => /4
                         int8_t offset = R[4] % 4;
-                        int8_t *ptr = (int8_t*)&mem[R[4]>>2];
-                        printf("%s", (char*)&ptr[offset]);
+                        int8_t *ptr = (int8_t *) &mem[R[4] >> 2];
+                        printf("%s", (char *) &ptr[offset]);
                     }
                     break;
                 }
@@ -348,28 +345,28 @@ void MIPS::execute()
         case BEQ:
         {
             if(R[rs] == R[rt])
-                pc += (kte16<<2);
+                pc += (kte16 << 2);
             printExecute();
             break;
         }
         case BNE:
         {
             if(R[rs] != R[rt])
-                pc += (kte16<<2);
+                pc += (kte16 << 2);
             printExecute();
             break;
         }
         case BLEZ:
         {
             if(R[rs] <= 0)
-                pc += (kte16<<2);
+                pc += (kte16 << 2);
             printExecute();
             break;
         }
         case BGTZ:
         {
             if(R[rs] > 0)
-                pc += (kte16<<2);
+                pc += (kte16 << 2);
             printExecute();
             break;
         }
@@ -393,7 +390,7 @@ void MIPS::execute()
         }
         case ANDI:
         {
-            R[rd] = R[rs] & (kte16&0xFFFF);
+            R[rd] = R[rs] & (kte16 & 0xFFFF);
             printExecute();
             break;
         }
@@ -412,7 +409,7 @@ void MIPS::execute()
         case J:
         {
             // word adress => *4
-            pc = kte26<<2;
+            pc = kte26 << 2;
             printExecute();
             break;
         }
@@ -420,7 +417,7 @@ void MIPS::execute()
         {
             R[31] = pc;
             // word adress => *4
-            pc = kte26<<2;
+            pc = kte26 << 2;
             printExecute();
             break;
         }
