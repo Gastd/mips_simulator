@@ -349,7 +349,7 @@ void MIPS::execute()
         }
         case BGTZ:
         {
-            if(R[rs] >= 0)
+            if(R[rs] > 0)
                 pc += (kte16<<2);
             printExecute();
             break;
