@@ -27,8 +27,10 @@ MIPS::~MIPS()
 {
 }
 
-void MIPS::fillMemory(std::string text_path, std::string data_path)
+void MIPS::fillMemory(std::string text_path, std::string data_path, bool print_instructions)
 {
+    print_instructions_ = print_instructions;
+
     std::ifstream infile;
     // loading .text
     infile.open(text_path, std::ios::binary|std::ios::in);
@@ -148,19 +150,19 @@ void MIPS::execute()
                 case ADD:
                 {
                     R[rd] = R[rs] + R[rt];
-                    printf("R[%d] = R[%d] + R[%d]\n", rd, rs, rt);
+                    printExecute();
                     break;
                 }
                 case ADDU:
                 {
                     R[rd] = R[rs] + R[rt];
-                    printf("R[%d] = R[%d] + R[%d]\n", rd, rs, rt);
+                    printExecute();
                     break;
                 }
                 case SUB:
                 {
                     R[rd] = R[rs] - R[rt];
-                    printf("R[%d] = R[%d] - R[%d]\n", rd, rs, rt);
+                    printExecute();
                     break;
                 }
                 case MULT:
@@ -168,75 +170,75 @@ void MIPS::execute()
                     int64_t aux = R[rs] * R[rt];
                     hi = (aux & 0xFFFFFFFF00000000);
                     lo = (aux & 0x00000000FFFFFFFF);
-                    printf("{hi,lo} = R[%d] * R[%d]\n", rs, rt);
+                    printExecute();
                     break;
                 }
                 case DIV:
                 {
                     lo = R[rs] / R[rt];
                     hi = R[rs] % R[rt];
-                    printf("lo = R[%d] / R[%d] \nhi = R[%d] %% R[%d]\n", rs, rt, rs, rt);
+                    printExecute();
                     break;
                 }
                 case AND:
                 {
                     R[rd] = R[rs] & R[rt];
-                    printf("R[%d] = R[%d] & R[%d]\n", rd, rs, rt);
+                    printExecute();
                     break;
                 }
                 case OR:
                 {
                     R[rd] = R[rs] | R[rt];
-                    printf("R[%d] = R[%d] | R[%d]\n", rd, rs, rt);
+                    printExecute();
                     break;
                 }
                 case XOR:
                 {
                     R[rd] = R[rs] ^ R[rt];
-                    printf("R[%d] = R[%d] ^ R[%d]\n", rd, rs, rt);
+                    printExecute();
                     break;
                 }
                 case NOR:
                 {
                     R[rd] = not(R[rs] | R[rt]);
-                    printf("R[%d] = not(R[%d] | R[%d])\n", rd, rs, rt);
+                    printExecute();
                     break;
                 }
                 case SLT:
                 {
                     R[rd] = (R[rs] < R[rt]) ? 1 : 0;
-                    printf("R[%d] = (R[%d] < R[%d]) ? 1 : 0\n", rd, rs, rt);
+                    printExecute();
                     break;
                 }
                 case JR:
                 {
                     pc = R[rs];
-                    printf("pc = R[%d]\n", rs);
+                    printExecute();
                     break;
                 }
                 case SLL:
                 {
                     R[rd] = R[rt] << shamt;
-                    printf("R[%d] = R[%d] << %d\n", rd, rt, shamt);
+                    printExecute();
                     break;
                 }
                 case SRL:
                 {
                     R[rd] = R[rt] >> shamt;
-                    printf("R[%d] = R[%d] >> %d\n", rd, rt, shamt);
+                    printExecute();
                     break;
                 }
                 case SRA:
                 {
                     R[rd] = R[rt] >> shamt;
-                    printf("R[%d] = R[%d] >> %d\n", rd, rt, shamt);
+                    printExecute();
                     break;
                 }
                 case SYSCALL:
                 {
                     if(R[2] == 10)
                     {
-                        printf("SYSCALL EXIT\n");
+                        printf("\nSYSCALL EXIT\n");
                         finish_sim_ = true;
                     }
                     if(R[2] == 1)
@@ -258,13 +260,13 @@ void MIPS::execute()
                 case MFHI:
                 {
                     R[rd] = hi;
-                    printf("R[%d] = hi\n", rd);
+                    printExecute();
                     break;
                 }
                 case MFLO:
                 {
                     R[rd] = lo;
-                    printf("R[%d] = lo\n", rd);
+                    printExecute();
                     break;
                 }
             }
@@ -273,135 +275,126 @@ void MIPS::execute()
         case LW:
         {
             R[rt] = lw(R[rs], kte16);
-            printf("memory_address = %d\n", R[rs]+kte16);
-            printf("R[%d] = lw(R[%d], %d)\n", rt, rs, kte16);
+            printExecute();
             break;
         }
         case LB:
         {
             R[rt] = lb(R[rs], kte16);
-            printf("memory_address = %d\n", R[rs]+kte16);
-            printf("R[%d] = lb(R[%d], %d)\n", rt, rs, kte16);
+            printExecute();
             break;
         }
         case LBU:
         {
             R[rt] = lbu(R[rs], kte16);
-            printf("memory_address = %d\n", R[rs]+kte16);
-            printf("R[%d] = lbu(R[%d], %d)\n", rt, rs, kte16);
+            printExecute();
             break;
         }
         case LH:
         {
             R[rt] = lh(R[rs], kte16);
-            printf("memory_address = %d\n", R[rs]+kte16);
-            printf("R[%d] = lh(R[%d], %d)\n", rt, rs, kte16);
+            printExecute();
             break;
         }
         case LHU:
         {
             R[rt] = lhu(R[rs], kte16);
-            printf("memory_address = %d\n", R[rs]+kte16);
-            printf("R[%d] = lhu(R[%d], %d)\n", rt, rs, kte16);
+            printExecute();
             break;
         }
         case LUI:
         {
             R[rt] = kte16;
-            printf("memory_address = %d\n", R[rs]+kte16);
-            printf("R[%d] = %d\n", rt, kte16);
+            printExecute();
             break;
         }
         case SW:
         {
             sw(R[rs], kte16, R[rt]);
-            printf("memory_address = %d\n", R[rs]+kte16);
-            printf("sw(R[%d], %d, R[%d])\n", rs, kte16, rt);
+            printExecute();
             break;
         }
         case SB:
         {
             sb(R[rs], kte16, R[rt]);
-            printf("memory_address = %d\n", R[rs]+kte16);
-            printf("sb(R[%d], %d, R[%d])\n", rs, kte16, rt);
+            printExecute();
             break;
         }
         case SH:
         {
             sh(R[rs], kte16, R[rt]);
-            printf("memory_address = %d\n", R[rs]+kte16);
-            printf("sh(R[%d], %d, R[%d])\n", rs, kte16, rt);
+            printExecute();
             break;
         }
         case BEQ:
         {
             if(R[rs] == R[rt])
                 pc += (kte16<<2);
-            printf("if(R[%d] == R[%d]) pc += (%d<<2);\n", rs, rt, kte16);
+            printExecute();
             break;
         }
         case BNE:
         {
             if(R[rs] != R[rt])
                 pc += (kte16<<2);
-            printf("if(R[%d] != R[%d]) pc += (%d<<2);\n", rs, rt, kte16);
+            printExecute();
             break;
         }
         case BLEZ:
         {
             if(R[rs] <= 0)
                 pc += (kte16<<2);
-            printf("if(R[%d] <= 0) pc += (%d<<2);\n", rs, kte16);
+            printExecute();
             break;
         }
         case BGTZ:
         {
             if(R[rs] >= 0)
                 pc += (kte16<<2);
-            printf("if(R[%d] >= 0) pc += (%d<<2);\n", rs, kte16);
+            printExecute();
             break;
         }
         case ADDI:
         {
             R[rt] = R[rs] + kte16;
-            printf("R[%d] = (R[%d] + %d)\n", rt, rs, kte16);
+            printExecute();
             break;
         }
         case SLTI:
         {
             R[rd] = (R[rs] < kte16) ? 1 : 0;
-            printf("R[%d] = (R[%d] < %d) ? 1 : 0\n", rd, rs, kte16);
+            printExecute();
             break;
         }
         case SLTIU:
         {
             R[rd] = (R[rs] < kte16) ? 1 : 0;
-            printf("R[%d] = (R[%d] < %d) ? 1 : 0\n", rd, rs, kte16);
+            printExecute();
             break;
         }
         case ANDI:
         {
             R[rd] = R[rs] & (kte16&0xFFFF);
-            printf("R[%d] = R[%d] & %d\n", rt, rs, (kte16&0xFFFF));
+            printExecute();
             break;
         }
         case ORI:
         {
             R[rt] = R[rs] | kte16;
-            printf("R[%d] = R[%d] | %d\n", rt, rs, kte16);
+            printExecute();
             break;
         }
         case XORI:
         {
             R[rt] = R[rs] ^ kte16;
-            printf("R[%d] = R[%d] ^ %d\n", rt, rs, kte16);
+            printExecute();
             break;
         }
         case J:
         {
             // word adress => *4
             pc = kte26<<2;
-            printf("J %d\n", kte26<<2);
+            printExecute();
             break;
         }
         case JAL:
@@ -409,14 +402,229 @@ void MIPS::execute()
             R[31] = pc;
             // word adress => *4
             pc = kte26<<2;
-            printf("JAL %d\n", kte26<<2);
+            printExecute();
             break;
         }
         case ADDUI:
         {
             R[rt] = R[rs] + kte16; // Looks like ADDI
-            printf("R[%d] = R[%d] + %d\n", rt, rs, kte16);
+            printExecute();
             break;
+        }
+    }
+}
+
+void MIPS::printExecute()
+{
+    if(print_instructions_)
+    {
+        switch(opcode)
+        {
+            case EXT:
+            {
+                switch(funct)
+                {
+                    case ADD:
+                    {
+                        printf("R[%d] = R[%d] + R[%d]\n", rd, rs, rt);
+                        break;
+                    }
+                    case ADDU:
+                    {
+                        printf("R[%d] = R[%d] + R[%d]\n", rd, rs, rt);
+                        break;
+                    }
+                    case SUB:
+                    {
+                        printf("R[%d] = R[%d] - R[%d]\n", rd, rs, rt);
+                        break;
+                    }
+                    case MULT:
+                    {
+                        printf("{hi,lo} = R[%d] * R[%d]\n", rs, rt);
+                        break;
+                    }
+                    case DIV:
+                    {
+                        printf("lo = R[%d] / R[%d] \nhi = R[%d] %% R[%d]\n", rs, rt, rs, rt);
+                        break;
+                    }
+                    case AND:
+                    {
+                        printf("R[%d] = R[%d] & R[%d]\n", rd, rs, rt);
+                        break;
+                    }
+                    case OR:
+                    {
+                        printf("R[%d] = R[%d] | R[%d]\n", rd, rs, rt);
+                        break;
+                    }
+                    case XOR:
+                    {
+                        printf("R[%d] = R[%d] ^ R[%d]\n", rd, rs, rt);
+                        break;
+                    }
+                    case NOR:
+                    {
+                        printf("R[%d] = not(R[%d] | R[%d])\n", rd, rs, rt);
+                        break;
+                    }
+                    case SLT:
+                    {
+                        printf("R[%d] = (R[%d] < R[%d]) ? 1 : 0\n", rd, rs, rt);
+                        break;
+                    }
+                    case JR:
+                    {
+                        printf("pc = R[%d]\n", rs);
+                        break;
+                    }
+                    case SLL:
+                    {
+                        printf("R[%d] = R[%d] << %d\n", rd, rt, shamt);
+                        break;
+                    }
+                    case SRL:
+                    {
+                        printf("R[%d] = R[%d] >> %d\n", rd, rt, shamt);
+                        break;
+                    }
+                    case SRA:
+                    {
+                        printf("R[%d] = R[%d] >> %d\n", rd, rt, shamt);
+                        break;
+                    }
+                    case MFHI:
+                    {
+                        printf("R[%d] = hi\n", rd);
+                        break;
+                    }
+                    case MFLO:
+                    {
+                        printf("R[%d] = lo\n", rd);
+                        break;
+                    }
+                }
+                break;
+            }
+            case LW:
+            {
+                printf("memory_address = %d\n", R[rs]+kte16);
+                printf("R[%d] = lw(R[%d], %d)\n", rt, rs, kte16);
+                break;
+            }
+            case LB:
+            {
+                printf("memory_address = %d\n", R[rs]+kte16);
+                printf("R[%d] = lb(R[%d], %d)\n", rt, rs, kte16);
+                break;
+            }
+            case LBU:
+            {
+                printf("memory_address = %d\n", R[rs]+kte16);
+                printf("R[%d] = lbu(R[%d], %d)\n", rt, rs, kte16);
+                break;
+            }
+            case LH:
+            {
+                printf("memory_address = %d\n", R[rs]+kte16);
+                printf("R[%d] = lh(R[%d], %d)\n", rt, rs, kte16);
+                break;
+            }
+            case LHU:
+            {
+                printf("memory_address = %d\n", R[rs]+kte16);
+                printf("R[%d] = lhu(R[%d], %d)\n", rt, rs, kte16);
+                break;
+            }
+            case LUI:
+            {
+                printf("R[%d] = %d\n", rt, kte16);
+                break;
+            }
+            case SW:
+            {
+                printf("memory_address = %d\n", R[rs]+kte16);
+                printf("sw(R[%d], %d, R[%d])\n", rs, kte16, rt);
+                break;
+            }
+            case SB:
+            {
+                printf("memory_address = %d\n", R[rs]+kte16);
+                printf("sb(R[%d], %d, R[%d])\n", rs, kte16, rt);
+                break;
+            }
+            case SH:
+            {
+                printf("memory_address = %d\n", R[rs]+kte16);
+                printf("sh(R[%d], %d, R[%d])\n", rs, kte16, rt);
+                break;
+            }
+            case BEQ:
+            {
+                printf("if(R[%d] == R[%d]) pc += (%d<<2);\n", rs, rt, kte16);
+                break;
+            }
+            case BNE:
+            {
+                printf("if(R[%d] != R[%d]) pc += (%d<<2);\n", rs, rt, kte16);
+                break;
+            }
+            case BLEZ:
+            {
+                printf("if(R[%d] <= 0) pc += (%d<<2);\n", rs, kte16);
+                break;
+            }
+            case BGTZ:
+            {
+                printf("if(R[%d] >= 0) pc += (%d<<2);\n", rs, kte16);
+                break;
+            }
+            case ADDI:
+            {
+                printf("R[%d] = (R[%d] + %d)\n", rt, rs, kte16);
+                break;
+            }
+            case SLTI:
+            {
+                printf("R[%d] = (R[%d] < %d) ? 1 : 0\n", rd, rs, kte16);
+                break;
+            }
+            case SLTIU:
+            {
+                printf("R[%d] = (R[%d] < %d) ? 1 : 0\n", rd, rs, kte16);
+                break;
+            }
+            case ANDI:
+            {
+                printf("R[%d] = R[%d] & %d\n", rt, rs, (kte16&0xFFFF));
+                break;
+            }
+            case ORI:
+            {
+                printf("R[%d] = R[%d] | %d\n", rt, rs, kte16);
+                break;
+            }
+            case XORI:
+            {
+                printf("R[%d] = R[%d] ^ %d\n", rt, rs, kte16);
+                break;
+            }
+            case J:
+            {
+                printf("J %d\n", kte26<<2);
+                break;
+            }
+            case JAL:
+            {
+                printf("JAL %d\n", kte26<<2);
+                break;
+            }
+            case ADDUI:
+            {
+                printf("R[%d] = R[%d] + %d\n", rt, rs, kte16);
+                break;
+            }
         }
     }
 }
