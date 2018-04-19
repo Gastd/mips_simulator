@@ -17,6 +17,10 @@ kte16(0x0), kte26(0x0)
     {
         R[i] = 0;
     }
+
+    // Init $sp and $gp
+    R[28] = 0x1800; // $gp
+    R[29] = 0x3FFC; // $sp
 }
 
 MIPS::~MIPS()
