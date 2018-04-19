@@ -168,14 +168,14 @@ void MIPS::execute()
                     int64_t aux = R[rs] * R[rt];
                     hi = (aux & 0xFFFFFFFF00000000);
                     lo = (aux & 0x00000000FFFFFFFF);
-                    printf("{hi,lo} = R[%d] * R[%d]\n", rd, rs, rt);
+                    printf("{hi,lo} = R[%d] * R[%d]\n", rs, rt);
                     break;
                 }
                 case DIV:
                 {
                     lo = R[rs] / R[rt];
                     hi = R[rs] % R[rt];
-                    printf("lo = R[rs] / R[rt];\nhi = R[rs] % R[rt];\n", rd, rs, rt);
+                    printf("lo = R[%d] / R[%d] \nhi = R[%d] %% R[%d]\n", rs, rt, rs, rt);
                     break;
                 }
                 case AND:
@@ -217,19 +217,19 @@ void MIPS::execute()
                 case SLL:
                 {
                     R[rd] = R[rt] << shamt;
-                    printf("R[%d] = R[%d] << %d\n", rd, rs, shamt);
+                    printf("R[%d] = R[%d] << %d\n", rd, rt, shamt);
                     break;
                 }
                 case SRL:
                 {
                     R[rd] = R[rt] >> shamt;
-                    printf("R[%d] = R[%d] >> %d\n", rd, rs, shamt);
+                    printf("R[%d] = R[%d] >> %d\n", rd, rt, shamt);
                     break;
                 }
                 case SRA:
                 {
                     R[rd] = R[rt] >> shamt;
-                    printf("R[%d] = R[%d] >> %d\n", rd, rs, shamt);
+                    printf("R[%d] = R[%d] >> %d\n", rd, rt, shamt);
                     break;
                 }
                 case SYSCALL:
@@ -258,11 +258,13 @@ void MIPS::execute()
                 case MFHI:
                 {
                     R[rd] = hi;
+                    printf("R[%d] = hi\n", rd);
                     break;
                 }
                 case MFLO:
                 {
                     R[rd] = lo;
+                    printf("R[%d] = lo\n", rd);
                     break;
                 }
             }
