@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     MIPS mips;
 
-    mips.fillMemory(text_path, data_path, false);
+    mips.loadMemory(text_path, data_path, false);
 
     mips.run();
 

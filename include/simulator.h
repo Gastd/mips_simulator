@@ -26,7 +26,7 @@ public:
     MIPS();
 
     void run();
-    void fillMemory(std::string, std::string, bool print_instructions_ = false);
+    void loadMemory(std::string, std::string, bool print_instructions_ = false);
     void step();
     // Aux function
     void dump_mem(uint32_t address, uint32_t size);         // Auxiliary fucntion, print the memory chunk
@@ -40,9 +40,8 @@ private:
     
     int32_t mem[MEM_SIZE];  // Memory array
     bool finish_sim_, print_instructions_, memory_filled_;
-    uint32_t pc;
-    uint32_t ri, hi, lo;
-    // 
+    uint32_t pc, ri, hi, lo;
+    // fields of R, I and J formats
     int32_t opcode, rs, rt, rd, shamt, funct, kte16;
     uint32_t kte26;
 

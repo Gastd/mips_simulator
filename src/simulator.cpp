@@ -38,16 +38,18 @@ MIPS::~MIPS()
 {
 }
 
-void MIPS::fillMemory(std::string text_path, std::string data_path, bool print_instructions)
+void MIPS::loadMemory(std::string text_path, std::string data_path, bool print_instructions)
 {
     print_instructions_ = print_instructions;
 
     std::ifstream infile;
+    // char *buffer = new char[4];
+    char buffer[4];
+
     // loading .text
     infile.open(text_path, std::ios::binary|std::ios::in);
     if(infile.is_open())
     {
-        char *buffer = new char[4];
         int8_t *memory_pointer = (int8_t *) &mem[0];
         // printf("memory_pointer = %p\n", memory_pointer);
         while (infile.read(buffer, 4))
@@ -58,7 +60,7 @@ void MIPS::fillMemory(std::string text_path, std::string data_path, bool print_i
             memory_pointer[3] = buffer[3];
             // printf("memory_pointer = %p with %01x %01x %01x %01x\n", 
             //     memory_pointer, buffer[0], buffer[1], buffer[2], buffer[3]);
-            memory_pointer+=4;
+            memory_pointer += 4;
         }
         memory_filled_ = true;
         // printf("mem[0] = %0x\n", mem[0]);
@@ -73,7 +75,6 @@ void MIPS::fillMemory(std::string text_path, std::string data_path, bool print_i
     infile.open(data_path, std::ios::binary|std::ios::in);
     if(infile.is_open())
     {
-        char *buffer = new char[4];
         int8_t *memory_pointer = (int8_t *) &mem[2048];
         // printf("memory_pointer = %p\n", memory_pointer);
         while(infile.read(buffer, 4))
@@ -82,7 +83,7 @@ void MIPS::fillMemory(std::string text_path, std::string data_path, bool print_i
             memory_pointer[1] = buffer[1];
             memory_pointer[2] = buffer[2];
             memory_pointer[3] = buffer[3];
-            memory_pointer+=4;
+            memory_pointer += 4;
         }
         // printf("mem[2048] = %0x\n", mem[2048]);
         infile.close();
@@ -91,6 +92,8 @@ void MIPS::fillMemory(std::string text_path, std::string data_path, bool print_i
     {
         std::cout << "Error opening data file" << std::endl;
     }
+
+    // delete[] buffer;
 }
 
 void MIPS::run()
