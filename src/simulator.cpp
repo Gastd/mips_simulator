@@ -12,6 +12,7 @@ kte16(0x0), kte26(0x0)
     for (i = 0; i < MEM_SIZE; ++i)
         mem[i] = 0;
 
+    // Initialize registers with zeros
     for (i = 0; i < 32; ++i)
     {
         R[i] = 0;

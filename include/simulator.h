@@ -72,7 +72,6 @@ private:
     void sw(uint32_t address, int16_t kte, int32_t dado);   // Simulated instruction sw, store word
     void sh(uint32_t address, int16_t kte, uint16_t dado);  // Simulated instruction sh, store halfword
     void sb(uint32_t address, int16_t kte, int8_t dado);    // Simulated instruction sb, load byte
-
 };
 
 #endif
