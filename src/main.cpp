@@ -1,3 +1,14 @@
+/**
+ * Unversidade de Brasilia
+ * Instituto de Ciências Exatas
+ * Departamento de Ciencia da Computaçao
+ * Organização e Arquitetura de Computadores
+ * 
+ * Trabalho II - MIPS Simulator
+ * Porfessor: Ricardo Jacobi
+ * @author Gabriel F P Araujo
+ */
+
 #include <iostream>
 #include "simulator.h"
 
