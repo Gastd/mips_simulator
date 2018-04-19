@@ -44,11 +44,6 @@ void MIPS::fillMemory(std::string text_path, std::string data_path)
             memory_pointer+=4;
         }
         memory_filled_ = true;
-        // while(infile.read((char *)&buffer, sizeof(buffer)))
-        // {
-        //     memory_pointer[0] = buffer[0];
-        //     memory_pointer++;
-        // }
         printf("mem[0] = %0x\n", mem[0]);
         infile.close();
     }
