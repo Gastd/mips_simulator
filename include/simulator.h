@@ -20,6 +20,7 @@ public:
     // Aux function
     void dump_mem(uint32_t address, uint32_t size);         // Auxiliary fucntion, print the memory chunk
     void dump_mem(uint32_t start, uint32_t end, char format);
+    void dump_reg(char format);
 
     ~MIPS();
     

@@ -411,7 +411,6 @@ void MIPS::execute()
             printf("R[%d] = R[%d] + %d\n", rt, rs, kte16);
             break;
         }
-
     }
 }
 
@@ -425,6 +424,45 @@ void MIPS::dump_mem(uint32_t address, uint32_t size)
         printf("mem[%d] = %08x\n", i, dado);
     }
 }
+
+void MIPS::dump_mem(uint32_t start, uint32_t end, char format)
+{
+    uint32_t kte, i, size;
+    size = (end - start)/4;
+    for(kte = 0, i = 0; i < size; i++, kte += 4)
+    {
+        int32_t dado = lw((start + kte), 0);
+        if(format == 'h')
+            printf("mem[%d] = %08x\n", i, dado);
+        else if(format == 'd')
+            printf("mem[%d] = %d\n", i, dado);
+        else
+            printf("Format not supported\n");
+    }
+}
+
+void MIPS::dump_reg(char format)
+{
+    if(format == 'h')
+    {
+        printf("pc = %08x\n", pc);
+        printf("hi = %08x\n", hi);
+        printf("lo = %08x\n", lo);
+        for(int i = 0; i < 32; ++i)
+            printf("R[%d] = %08x\n", i, R[i]);
+    }
+    else if(format == 'd')
+    {
+        printf("pc = %d\n", pc);
+        printf("hi = %d\n", hi);
+        printf("lo = %d\n", lo);
+        for(int i = 0; i < 32; ++i)
+            printf("R[%d] = %d\n", i, R[i]);
+    }
+    else
+            printf("Format not supported\n");
+}
+
 
 int32_t MIPS::lw(uint32_t address, int16_t kte)
 {
