@@ -165,14 +165,17 @@ void MIPS::execute()
                 }
                 case MULT:
                 {
-                    R[rd] = R[rs] * R[rt];
-                    printf("R[%d] = R[%d] * R[%d]\n", rd, rs, rt);
+                    int64_t aux = R[rs] * R[rt];
+                    hi = (aux & 0xFFFFFFFF00000000);
+                    lo = (aux & 0x00000000FFFFFFFF);
+                    printf("{hi,lo} = R[%d] * R[%d]\n", rd, rs, rt);
                     break;
                 }
                 case DIV:
                 {
-                    R[rd] = R[rs] / R[rt];
-                    printf("R[%d] = R[%d] / R[%d]\n", rd, rs, rt);
+                    lo = R[rs] / R[rt];
+                    hi = R[rs] % R[rt];
+                    printf("lo = R[rs] / R[rt];\nhi = R[rs] % R[rt];\n", rd, rs, rt);
                     break;
                 }
                 case AND:
@@ -254,10 +257,12 @@ void MIPS::execute()
 
                 case MFHI:
                 {
+                    R[rd] = hi;
                     break;
                 }
                 case MFLO:
                 {
+                    R[rd] = lo;
                     break;
                 }
             }
