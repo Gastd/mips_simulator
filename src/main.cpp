@@ -10,12 +10,14 @@
  */
 
 #include <iostream>
+#include <string>
 #include "simulator.h"
 
 int main(int argc, char *argv[])
 {
+    bool dump_reg = false;
     std::string text_path(""), data_path("");
-    if (argc != 3)
+    if (argc < 3)
     {
         std::cout << "Please provide exactly two files (text.bin and data.bin)" << std::endl;
         return 0;
@@ -24,11 +26,15 @@ int main(int argc, char *argv[])
     {
         text_path = argv[1];
         data_path = argv[2];
+        if(argc > 3)
+            dump_reg = std::stoi(argv[3]);
     }
 
     MIPS mips;
 
     mips.loadMemory(text_path, data_path, false);
+    if(dump_reg)
+        mips.dump_reg('h');
 
     mips.run();
 
