@@ -135,14 +135,14 @@ void MIPS::fetch()
 
 void MIPS::decode()
 {
-    int16_t aux; // Auxiliar variable used to extend the signal of kte16
+    int16_t aux; // Auxiliary variable used to extend the signal of kte16
     opcode = (ri & 0xFC000000) >> 26;
     rs = (ri & 0x3E00000) >> 21;
     rt = (ri & 0x1F0000) >> 16;
     rd = (ri & 0xF800) >> 11;
     shamt = (ri & 0x7C0) >> 6;
     funct = (ri & 0x3F);
-    
+
     aux = (ri & 0xFFFF);
     kte16 = aux;
     kte26 = (ri & 0x3FFFFFF);
@@ -646,17 +646,6 @@ void MIPS::printExecute()
     }
 }
 
-void MIPS::dump_mem(uint32_t address, uint32_t size)
-{
-    uint32_t kte, i;
-    size /= 4;
-    for(kte = 0, i = 0; i < size; i++, kte += 4)
-    {
-        int32_t dado = lw((address + kte), 0);
-        printf("mem[%d] = %08x\n", i, dado);
-    }
-}
-
 void MIPS::dump_mem(uint32_t start, uint32_t end, char format)
 {
     uint32_t kte, i, size;
@@ -677,22 +666,22 @@ void MIPS::dump_reg(char format)
 {
     if(format == 'h')
     {
+        for(int i = 0; i < 32; ++i)
+            printf("R[%d] = %08x\n", i, R[i]);
         printf("pc = %08x\n", pc);
         printf("hi = %08x\n", hi);
         printf("lo = %08x\n", lo);
-        for(int i = 0; i < 32; ++i)
-            printf("R[%d] = %08x\n", i, R[i]);
     }
     else if(format == 'd')
     {
+        for(int i = 0; i < 32; ++i)
+            printf("R[%d] = %d\n", i, R[i]);
         printf("pc = %d\n", pc);
         printf("hi = %d\n", hi);
         printf("lo = %d\n", lo);
-        for(int i = 0; i < 32; ++i)
-            printf("R[%d] = %d\n", i, R[i]);
     }
     else
-            printf("Format not supported\n");
+        printf("Format not supported\n");
 }
 
 

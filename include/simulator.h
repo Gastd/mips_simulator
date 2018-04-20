@@ -18,7 +18,7 @@
 
 #define MEM_SIZE        4096   // Simulated memory's size
 #define TEXT_START      0x0000 // .text base address
-#define TEXT_LIMIT      0x07D0 // .text limit address
+#define TEXT_LIMIT      0x1FFF // .text limit address
 #define DATA_START      0x2000 // .data base address
 #define GLOBAL_START    0x1800 // global pointer $gp
 #define STACK_START     0x3FFC // stack base address, stack pointer $sp
@@ -32,7 +32,6 @@ public:
     void loadMemory(std::string, std::string, bool print_instructions_ = false);
     void step();
     // Aux function
-    void dump_mem(uint32_t address, uint32_t size);         // Auxiliary fucntion, print the memory chunk
     void dump_mem(uint32_t start, uint32_t end, char format);
     void dump_reg(char format);
 
@@ -56,7 +55,7 @@ private:
     void execute();
 
     // Registers
-    int32_t R[32];  // Memory array
+    int32_t R[32];  // Registers array
 
     enum OPCODES
     {
