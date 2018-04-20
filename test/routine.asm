@@ -1,30 +1,8 @@
-##
-# Test Rountine for MIPS 3.3 PUM
-# Laboratorio 3B
-# /Version      0.2 beta
-# /Authors      Rafael
-##
-
-###############################################################################
-# Data Segment
-###############################################################################
 .data
-MSG1:     .asciiz           "\nType a int number:\n"
-MSG2:     .asciiz           "\nType a float number:\n"
-MSG3:     .asciiz           "\nType a char:\n"
-MSG0:     .asciiz           "_You just typed:\n"
 ERROR_MSG:	.asciiz     "ERROR INSTRUCTION:\n"
-
-###############################################################################
-# Instruction Segment
-###############################################################################
+MSG0:		.asciiz     "PRINTING THIS\n"
+MSG1:		.asciiz     "PRINTING NUMBER: "
 .text
-
-##
-# Main Routine
-##
-main:
-
 ##
 # Test Jump
 ##
@@ -66,8 +44,8 @@ test.blez:
 # Test ALU
 ##
 test.alu:
-    addi    $t0,$0,5        # Addi - Positive Value
-    addi    $t1,$0,-2       # Addi - Negative Value
+    addi    $t0,$0,5        # Addi - Positive number
+    addi    $t1,$0,-2       # Addi - Negative number
 
 test.alu.add:
     add     $s7,$t0,$t1     # add - Sum of two values
@@ -151,47 +129,37 @@ test.memoryacess:
     lh      $t1,4($sp)      # Load
     bne     $t0,$t1,error    # check values
 
-    shu     $t0,8($sp)      # Store
+    sh      $t0,8($sp)      # Store
     lhu     $t1,8($sp)      # Load
     bne     $t0,$t1,error    # check values
 
     sb     $t0,12($sp)      # Store
     lb     $t1,12($sp)      # Load
     bne    $t0,$t1,error    # check values
-#
+
 ##
 # Test Syscall
- ##
+##
 test.syscall:
 
 test.syscall.printstr:
     addi    $v0,$0,4
-    la      $a0,MSG1
+    la      $a0,MSG0
     syscall
 
 test.syscall.printint:
     addi    $v0,$0,4
-    la      $a0,MSG0
+    la      $a0,MSG1
     syscall
 
     add     $a0,$0,$t0
     addi    $v0,$0,1
     syscall                 # Print Int Value
 
-test.syscall.printchr:
-    addi    $v0,$0,4
-    la      $a0,MSG0
-    syscall
-
-    add     $a0,$0,$t0      # Get Char Value
-    addi    $v0,$0,11
-    syscall                 # Print Char
-
 ## Finish Program
 end.main:
     addi    $v0, $zero, 10
     syscall
-
 ##
 # Default Error
 #  - Get the last line and print the instruction

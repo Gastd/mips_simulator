@@ -22,7 +22,7 @@ loop: lw   $t3, 0($t0)      # Get value from array F[n]
       jal  print            # call print routine. 
       li   $v0, 10          # system call for exit
       syscall               # we are out of here.
-		
+
 #########  routine to print the numbers on one line. 
 
       .data

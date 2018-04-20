@@ -17,6 +17,8 @@ CXXFLAGS = -Wall -std=c++11 -g
 # Target [folder(s)]
 BIN_DIR = bin
 OBJ_DIR = obj
+TEST_DIR = test
+EXPCT_DIR= $(TEST_DIR)/expected
 TARGET  = $(BIN_DIR)/main
 
 # Include directories
@@ -49,6 +51,7 @@ all: $(TARGET)
 dirs:
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(BIN_DIR)
+	@mkdir -p $(EXPCT_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) -c -o $@ $< $(CXXFLAGS) -I$(INC_DIR)
@@ -67,3 +70,21 @@ $(TARGET): dirs $(OBJ) $(MAIN_OBJ) $(BIN_DIR)
 
 clean:
 	@rm -rf $(OBJ_DIR)/*.o $(BIN_DIR)/* 
+
+.PHONY = test_simulator
+test_simulator: test_prime test_fibonacci test_routines
+
+test_prime:
+	@echo "Rodando teste de numeros primos"
+	./$(TARGET) $(TEST_DIR)/primos.text.bin $(TEST_DIR)/primos.data.bin > $(EXPCT_DIR)/prime_output.txt
+	@echo "\033[92mTESTE numeros primos concluido!\033[0m"
+
+test_fibonacci:
+	@echo "Rodando teste sequencia de Fibonacci"
+	./bin/main $(TEST_DIR)/fibonacci.text.bin $(TEST_DIR)/fibonacci.data.bin > $(EXPCT_DIR)/fibonacci_output.txt
+	@echo "\033[92mTESTE sequencia de Fibonacci concluido!\033[0m"
+
+test_routines:
+	@echo "Rodando teste de instruções"
+	./bin/main $(TEST_DIR)/routine.text.bin $(TEST_DIR)/routine.data.bin > $(EXPCT_DIR)/routine_output.txt
+	@echo "\033[92mTESTE sequencia de Fibonacci concluido!\033[0m"
