@@ -76,15 +76,18 @@ test_simulator: test_prime test_fibonacci test_routines
 
 test_prime:
 	@echo "Rodando teste de numeros primos"
-	./$(TARGET) $(TEST_DIR)/primos.text.bin $(TEST_DIR)/primos.data.bin > $(EXPCT_DIR)/prime_output.txt
+	./$(TARGET) $(TEST_DIR)/primos.text.bin $(TEST_DIR)/primos.data.bin 1 > primos_output.txt
+	diff $(EXPCT_DIR)/primos_correct.txt primos_output.txt
 	@echo "\033[92mTESTE numeros primos concluido!\033[0m"
 
 test_fibonacci:
 	@echo "Rodando teste sequencia de Fibonacci"
-	./bin/main $(TEST_DIR)/fibonacci.text.bin $(TEST_DIR)/fibonacci.data.bin > $(EXPCT_DIR)/fibonacci_output.txt
+	./bin/main $(TEST_DIR)/fibonacci.text.bin $(TEST_DIR)/fibonacci.data.bin 1 > fibonacci_output.txt
+	diff $(EXPCT_DIR)/fibonacci_correct.txt fibonacci_output.txt
 	@echo "\033[92mTESTE sequencia de Fibonacci concluido!\033[0m"
 
 test_routines:
 	@echo "Rodando teste de instruções"
-	./bin/main $(TEST_DIR)/routine.text.bin $(TEST_DIR)/routine.data.bin > $(EXPCT_DIR)/routine_output.txt
+	./bin/main $(TEST_DIR)/routine.text.bin $(TEST_DIR)/routine.data.bin 1 > routine_output.txt
+	diff $(EXPCT_DIR)/routine_correct.txt routine_output.txt
 	@echo "\033[92mTESTE sequencia de Fibonacci concluido!\033[0m"

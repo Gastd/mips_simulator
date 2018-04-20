@@ -1,2 +1,0 @@
-Os oito primeiros numeros primos sao: 1 3 5 7 11 13 17 19 
-SYSCALL EXIT
