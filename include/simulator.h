@@ -29,7 +29,7 @@ public:
     MIPS();
 
     void run();
-    void loadMemory(std::string, std::string, bool print_instructions_ = false);
+    void loadMemory(std::string, std::string, bool print_instructions);
     void step();
     // Aux function
     void dump_mem(uint32_t start, uint32_t end, char format);
