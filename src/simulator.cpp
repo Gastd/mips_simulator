@@ -693,7 +693,7 @@ int32_t MIPS::lw(uint32_t address, int16_t kte)
         return -0x0;
     }
     uint32_t memory_address = (address + kte) / 4;
-    int32_t *point_address = &mem[memory_address];
+    uint32_t *point_address = &mem[memory_address];
 
     return point_address[0];
 }
@@ -701,6 +701,7 @@ int32_t MIPS::lw(uint32_t address, int16_t kte)
 int32_t MIPS::lh(uint32_t address, int16_t kte)
 {
     uint32_t memory_address = (address + kte) / 4;
+    int8_t idx = (address + kte) % 4;
     if ((address + kte) % 2)
     {
         printf("Halfword address não múltiplo de 2\n");
@@ -708,12 +709,13 @@ int32_t MIPS::lh(uint32_t address, int16_t kte)
     }
     int16_t *point_address = (int16_t *) &mem[memory_address];
 
-    return point_address[kte / 2];
+    return point_address[idx / 2];
 }
 
 uint32_t MIPS::lhu(uint32_t address, int16_t kte)
 {
     uint32_t memory_address = (address + kte) / 4;
+    int8_t idx = (address + kte) % 4;
     if ((address + kte) % 2)
     {
         printf("Halfword address não múltiplo de 2\n");
@@ -721,23 +723,25 @@ uint32_t MIPS::lhu(uint32_t address, int16_t kte)
     }
     uint16_t *point_address = (uint16_t *) &mem[memory_address];
 
-    return 0x0000FFFF & point_address[kte / 2];
+    return 0x0000FFFF & point_address[idx / 2];
 }
 
 int32_t MIPS::lb(uint32_t address, int16_t kte)
 {
     uint32_t memory_address = (address + kte) / 4;
+    int8_t idx = (address + kte) % 4;
     int8_t *point_address = (int8_t *) &mem[memory_address];
 
-    return point_address[kte];
+    return point_address[idx];
 }
 
 int32_t MIPS::lbu(uint32_t address, int16_t kte)
 {
     uint32_t memory_address = (address + kte) / 4;
+    int8_t idx = (address + kte) % 4;
     int8_t *point_address = (int8_t *) &mem[memory_address];
 
-    return 0x000000FF & point_address[kte];
+    return 0x000000FF & point_address[idx];
 }
 
 void MIPS::sw(uint32_t address, int16_t kte, int32_t dado)
@@ -748,7 +752,7 @@ void MIPS::sw(uint32_t address, int16_t kte, int32_t dado)
         printf("Word address não múltiplo de 4\n");
         return;
     }
-    int32_t *point_address = &mem[memory_address];
+    uint32_t *point_address = &mem[memory_address];
 
     point_address[0] = dado;
 }
@@ -756,6 +760,7 @@ void MIPS::sw(uint32_t address, int16_t kte, int32_t dado)
 void MIPS::sh(uint32_t address, int16_t kte, uint16_t dado)
 {
     uint32_t memory_address = (address + kte) / 4;
+    int8_t idx = (address + kte) % 4;
     if ((address + kte) % 2)
     {
         printf("Halfword address não múltiplo de 2\n");
@@ -763,13 +768,14 @@ void MIPS::sh(uint32_t address, int16_t kte, uint16_t dado)
     }
     int16_t *point_address = (int16_t *) &mem[memory_address];
 
-    point_address[kte / 2] = dado;
+    point_address[idx / 2] = dado;
 }
 
 void MIPS::sb(uint32_t address, int16_t kte, int8_t dado)
 {
     uint32_t memory_address = (address + kte) / 4;
+    int8_t idx = (address + kte) % 4;
     int8_t *point_address = (int8_t *) &mem[memory_address];
 
-    point_address[kte] = dado;
+    point_address[idx] = dado;
 }
