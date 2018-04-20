@@ -654,7 +654,7 @@ void MIPS::dump_mem(uint32_t start, uint32_t end, char format)
     {
         int32_t dado = lw((start + kte), 0);
         if(format == 'h')
-            printf("mem[%d] = %08x\n", i, dado);
+            printf("mem[%d] = 0x%08x\n", i, dado);
         else if(format == 'd')
             printf("mem[%d] = %d\n", i, dado);
         else
@@ -667,10 +667,10 @@ void MIPS::dump_reg(char format)
     if(format == 'h')
     {
         for(int i = 0; i < 32; ++i)
-            printf("R[%d] = %08x\n", i, R[i]);
-        printf("pc = %08x\n", pc);
-        printf("hi = %08x\n", hi);
-        printf("lo = %08x\n", lo);
+            printf("R[%d] = 0x%08x\n", i, R[i]);
+        printf("pc = 0x%08x\n", pc);
+        printf("hi = 0x%08x\n", hi);
+        printf("lo = 0x%08x\n", lo);
     }
     else if(format == 'd')
     {
@@ -693,7 +693,7 @@ int32_t MIPS::lw(uint32_t address, int16_t kte)
         return -0x0;
     }
     uint32_t memory_address = (address + kte) / 4;
-    uint32_t *point_address = &mem[memory_address];
+    int32_t *point_address = &mem[memory_address];
 
     return point_address[0];
 }
@@ -752,7 +752,7 @@ void MIPS::sw(uint32_t address, int16_t kte, int32_t dado)
         printf("Word address não múltiplo de 4\n");
         return;
     }
-    uint32_t *point_address = &mem[memory_address];
+    int32_t *point_address = &mem[memory_address];
 
     point_address[0] = dado;
 }

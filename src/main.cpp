@@ -33,10 +33,10 @@ int main(int argc, char *argv[])
     MIPS mips;
 
     mips.loadMemory(text_path, data_path, false);
-    if(dump_reg)
-        mips.dump_reg('h');
 
     mips.run();
+    if(dump_reg)
+        mips.dump_reg('h');
 
     return 0;
 }
