@@ -19,7 +19,7 @@ BIN_DIR = bin
 OBJ_DIR = obj
 TEST_DIR = test
 EXPCT_DIR= $(TEST_DIR)/expected
-TARGET  = $(BIN_DIR)/main
+TARGET  = $(BIN_DIR)/simulator
 
 # Include directories
 INC_DIR    = include/
@@ -69,10 +69,10 @@ $(TARGET): dirs $(OBJ) $(MAIN_OBJ) $(BIN_DIR)
 	$(CC) $(FLAGS) -o $(TARGET) $(MAIN_OBJ) $(HEADERS) $(OBJECTS)
 
 clean:
-	@rm -rf $(OBJ_DIR)/*.o $(BIN_DIR)/* 
+	@rm -rf $(OBJ_DIR)/*.o $(BIN_DIR)/* *.txt
 
 .PHONY = test_simulator
-test_simulator: test_prime test_fibonacci test_routines
+test_simulator: all test_prime test_fibonacci test_routines
 
 test_prime:
 	@echo "Rodando teste de numeros primos"
@@ -82,12 +82,12 @@ test_prime:
 
 test_fibonacci:
 	@echo "Rodando teste sequencia de Fibonacci"
-	./bin/main $(TEST_DIR)/fibonacci.text.bin $(TEST_DIR)/fibonacci.data.bin 1 > fibonacci_output.txt
+	./$(TARGET) $(TEST_DIR)/fibonacci.text.bin $(TEST_DIR)/fibonacci.data.bin 1 > fibonacci_output.txt
 	diff $(EXPCT_DIR)/fibonacci_correct.txt fibonacci_output.txt
 	@echo "\033[92mTESTE sequencia de Fibonacci concluido!\033[0m"
 
 test_routines:
 	@echo "Rodando teste de instruções"
-	./bin/main $(TEST_DIR)/routine.text.bin $(TEST_DIR)/routine.data.bin 1 > routine_output.txt
+	./$(TARGET) $(TEST_DIR)/routine.text.bin $(TEST_DIR)/routine.data.bin 1 > routine_output.txt
 	diff $(EXPCT_DIR)/routine_correct.txt routine_output.txt
-	@echo "\033[92mTESTE sequencia de Fibonacci concluido!\033[0m"
+	@echo "\033[92mTESTE de instruções concluido!\033[0m"
