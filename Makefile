@@ -72,7 +72,7 @@ clean:
 	@rm -rf $(OBJ_DIR)/*.o $(BIN_DIR)/* *.txt
 
 .PHONY = test_simulator
-test_simulator: all test_prime test_fibonacci test_routines
+test_simulator: all test_prime test_fibonacci test_testador
 
 test_prime:
 	@echo "Rodando teste de numeros primos"
@@ -86,8 +86,8 @@ test_fibonacci:
 	diff $(EXPCT_DIR)/fibonacci_correct.txt fibonacci_output.txt
 	@echo "\033[92mTESTE sequencia de Fibonacci concluido!\033[0m"
 
-test_routines:
+test_testador:
 	@echo "Rodando teste de instruções"
-	./$(TARGET) $(TEST_DIR)/routine.text.bin $(TEST_DIR)/routine.data.bin 1 > routine_output.txt
-	diff $(EXPCT_DIR)/routine_correct.txt routine_output.txt
+	./$(TARGET) $(TEST_DIR)/testador.text.bin $(TEST_DIR)/testador.data.bin 1 > testador_output.txt
+	diff $(EXPCT_DIR)/testador_correct.txt testador_output.txt
 	@echo "\033[92mTESTE de instruções concluido!\033[0m"
