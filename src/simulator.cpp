@@ -184,9 +184,11 @@ void MIPS::execute()
                 }
                 case MULT:
                 {
-                    int64_t aux = R[rs] * R[rt];
-                    hi = (aux & 0xFFFFFFFF00000000);
-                    lo = (aux & 0x00000000FFFFFFFF);
+                    int64_t mult1 = R[rs];
+                    int64_t mult2 = R[rt];
+                    int64_t resl = mult1 * mult2;
+                    hi = (resl & 0xFFFFFFFF00000000) >> 32;
+                    lo = (resl & 0x00000000FFFFFFFF);
                     printExecute();
                     break;
                 }
@@ -217,7 +219,7 @@ void MIPS::execute()
                 }
                 case NOR:
                 {
-                    R[rd] = not(R[rs] | R[rt]);
+                    R[rd] = ~(R[rs] | R[rt]);
                     printExecute();
                     break;
                 }
@@ -241,7 +243,7 @@ void MIPS::execute()
                 }
                 case SRL:
                 {
-                    R[rd] = R[rt] >> shamt;
+                    R[rd] = uint32_t(R[rt]) >> shamt;
                     printExecute();
                     break;
                 }
@@ -321,7 +323,7 @@ void MIPS::execute()
         }
         case LUI:
         {
-            R[rt] = kte16;
+            R[rt] = (kte16 << 16);
             printExecute();
             break;
         }
@@ -379,31 +381,31 @@ void MIPS::execute()
         }
         case SLTI:
         {
-            R[rd] = (R[rs] < kte16) ? 1 : 0;
+            R[rt] = (R[rs] < kte16) ? 1 : 0;
             printExecute();
             break;
         }
         case SLTIU:
         {
-            R[rd] = (R[rs] < kte16) ? 1 : 0;
+            R[rt] = (((uint32_t) R[rs]) < ((uint32_t) kte16)) ? 1 : 0;
             printExecute();
             break;
         }
         case ANDI:
         {
-            R[rd] = R[rs] & (kte16 & 0xFFFF);
+            R[rt] = R[rs] & (kte16 & 0xFFFF);
             printExecute();
             break;
         }
         case ORI:
         {
-            R[rt] = R[rs] | kte16;
+            R[rt] = R[rs] | (kte16 & 0xFFFF);
             printExecute();
             break;
         }
         case XORI:
         {
-            R[rt] = R[rs] ^ kte16;
+            R[rt] = R[rs] ^ (kte16 & 0xFFFF);
             printExecute();
             break;
         }
@@ -604,12 +606,12 @@ void MIPS::printExecute()
             }
             case SLTI:
             {
-                printf("R[%d] = (R[%d] < %d) ? 1 : 0\n", rd, rs, kte16);
+                printf("R[%d] = (R[%d] < %d) ? 1 : 0\n", rt, rs, kte16);
                 break;
             }
             case SLTIU:
             {
-                printf("R[%d] = (R[%d] < %d) ? 1 : 0\n", rd, rs, kte16);
+                printf("R[%d] = (R[%d] < %d) ? 1 : 0\n", rt, rs, (kte16 & 0xFFFF));
                 break;
             }
             case ANDI:
@@ -619,12 +621,12 @@ void MIPS::printExecute()
             }
             case ORI:
             {
-                printf("R[%d] = R[%d] | %d\n", rt, rs, kte16);
+                printf("R[%d] = R[%d] | %d\n", rt, rs, (kte16&0xFFFF));
                 break;
             }
             case XORI:
             {
-                printf("R[%d] = R[%d] ^ %d\n", rt, rs, kte16);
+                printf("R[%d] = R[%d] ^ %d\n", rt, rs, (kte16&0xFFFF));
                 break;
             }
             case J:
@@ -693,7 +695,7 @@ int32_t MIPS::lw(uint32_t address, int16_t kte)
         return -0x0;
     }
     uint32_t memory_address = (address + kte) / 4;
-    int32_t *point_address = &mem[memory_address];
+    uint32_t *point_address = &mem[memory_address];
 
     return point_address[0];
 }
@@ -752,7 +754,7 @@ void MIPS::sw(uint32_t address, int16_t kte, int32_t dado)
         printf("Word address não múltiplo de 4\n");
         return;
     }
-    int32_t *point_address = &mem[memory_address];
+    uint32_t *point_address = &mem[memory_address];
 
     point_address[0] = dado;
 }

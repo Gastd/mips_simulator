@@ -40,7 +40,7 @@ public:
 private:
     // void openFile(std::string);
     
-    int32_t mem[MEM_SIZE];  // Memory array
+    uint32_t mem[MEM_SIZE];  // Memory array
     bool finish_sim_, print_instructions_, memory_filled_;
     uint32_t pc, ri, hi, lo;
     // fields of R, I and J formats
